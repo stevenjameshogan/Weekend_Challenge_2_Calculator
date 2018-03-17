@@ -1,6 +1,7 @@
 let value1; // declare global variables, these are the users calc inputs based on buttons clicked
 let value2;
 let opType;
+let equalsPressed = false;
 
 $(readyNow);
 
@@ -9,10 +10,7 @@ function readyNow() { // enables event handlers, ontains array of calculation hi
     getAllCalcs() // calls to maintain history on page upon refresh until history is reset by user
 }
 function eventHandlers() { // routes to corresponding POST request function based on op type button clicked
-    // $('#addBtn').on('click', addVals);
-    // $('#subtractBtn').on('click', subtractVals);
-    // $('#multiplyBtn').on('click', multiplyVals);
-    // $('#divideBtn').on('click', divideVals);
+
     $('#refreshBtn').on('click', resetPage);
     $('.numberBtn').on('click', setValues);
     $('.operatorBtn').on('click', setOpType);
@@ -23,13 +21,24 @@ function eventHandlers() { // routes to corresponding POST request function base
 function setValues(){ // sets value1 and value2 based on number pushed by user, ignores if already set
     let valueIn = $(this).val();
     console.log($(this).val());
-    if (value1 == undefined) { // check to see if value1 and value2 are already assigned, if so, ignore input
+    console.log(opType);
+    
+    if (value1 == undefined && opType == undefined) { // check to see if value1 and value2 are already assigned, if so, ignore input
+        console.log('option 1');
+        console.log(opType);
         value1 = valueIn;
     }
-    else if (value2 == undefined) {
+    else if(opType == undefined){
+        console.log('option 2');
+        value1 = valueIn + value1;
+    }
+    else if (value2 === undefined) {
+        console.log('option 3!');
         value2 = valueIn;
     }
     else {
+        console.log('option 3!');
+        value2 = valueIn + value2;
     }
     console.log(value1, value2);
 }
@@ -48,70 +57,11 @@ function sendCalcData(){
         url: '/total'
     }).done(function(response) { // response is '200', success
         console.log('Yes!!!!!');
-        
+        value1 = undefined;
+        value2 = undefined;
+        opType = undefined;
         clearInputs(); 
         getAllCalcs(); 
-    }).fail(function(response) {
-    })
-}
-
-function addVals() { // packages user inputs in an object, sends to server, appends to DOM on success
-    let val1In = parseInt($('#value1In').val());
-    let val2In = parseInt($('#value2In').val());
-    let calcTypeIn = '+';
-    let calcInputs = {value1: val1In, value2: val2In, calcType: calcTypeIn};
-    $.ajax({
-        type: 'POST',
-        data: calcInputs,
-        url: '/total'
-    }).done(function(response) { // response is '200', success
-        clearInputs(); 
-        getAllCalcs(); 
-    }).fail(function(response) {
-    })
-}
-function subtractVals() { // packages user inputs in an object, sends to server, appends to DOM on success
-    let val1In = parseInt($('#value1In').val());
-    let val2In = parseInt($('#value2In').val());
-    let calcTypeIn = '-';
-    let calcInputs = {value1: val1In, value2: val2In, calcType: calcTypeIn};
-    $.ajax({
-        type: 'POST',
-        data: calcInputs,
-        url: '/total'
-    }).done(function(response) {
-        clearInputs();
-        getAllCalcs();
-    }).fail(function(response) {
-    })
-}
-function multiplyVals() { // packages user inputs in an object, sends to server, appends to DOM on success
-    let val1In = parseInt($('#value1In').val());
-    let val2In = parseInt($('#value2In').val());
-    let calcTypeIn = '*';
-    let calcInputs = {value1: val1In, value2: val2In, calcType: calcTypeIn};
-    $.ajax({
-        type: 'POST',
-        data: calcInputs,
-        url: '/total'
-    }).done(function(response) {
-        clearInputs();
-        getAllCalcs();
-    }).fail(function(response) {
-    })
-}
-function divideVals() { // packages user inputs in an object, sends to server, appends to DOM on success
-    let val1In = parseInt($('#value1In').val());
-    let val2In = parseInt($('#value2In').val());
-    let calcTypeIn = '/';
-    let calcInputs = {value1: val1In, value2: val2In, calcType: calcTypeIn};
-    $.ajax({
-        type: 'POST',
-        data: calcInputs,
-        url: '/total'
-    }).done(function(response) {
-        clearInputs();
-        getAllCalcs();
     }).fail(function(response) {
     })
 }
