@@ -13,5 +13,24 @@
 </head>
 <body>
     <h1>Hadar Weekend Calculator Challenge!</h1>
+
+    <div id="inputDiv">
+        <input type="number" placeholder="Value 1" id="value1In">
+        <input type="number" placeholder="Value 2" id="value2In">
+        <button id="addBtn">+</button>
+        <button id="subtractBtn">-</button>
+        <button id="multiplyBtc">*</button>
+        <button id="divideBtn">/</button>
+        <button id="refreshBtn">Refresh</button>
+    </div>
+
+    <div id="historyDiv">
+        <h2>Calculation History</h2>
+        <table>
+            <thead><tr><th>Value 1</th><th>Operation</th><th>Value 2</th><th>Total</th></tr></tr></thead>
+            <tbody id="historyBody"></tbody>
+        </table>
+    </div>
+
 </body>
 </html>
