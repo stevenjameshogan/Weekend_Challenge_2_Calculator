@@ -50,8 +50,10 @@ function divideVals(x, y) {
   totalCalculation = x / y;
 }
 
-
-
+app.post('/reset', (req, res) => {
+  calcHistoryArray = [];
+  res.sendStatus(200);
+})
 
 
 app.listen(PORT, () => {

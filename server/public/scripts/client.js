@@ -5,14 +5,13 @@ function readyNow() {
     eventHandlers();
     getAllCalcs()
 }
-
 function eventHandlers() { 
     $('#addBtn').on('click', addVals);
     $('#subtractBtn').on('click', subtractVals);
     $('#multiplyBtn').on('click', multiplyVals);
     $('#divideBtn').on('click', divideVals);
+    $('#refreshBtn').on('click', resetPage);
 }
-
 function addVals() {
     let val1In = parseInt($('#value1In').val());
     let val2In = parseInt($('#value2In').val());
@@ -100,4 +99,17 @@ function appendToDom(calcHistory) {
         tr.append('<td>' + calcHistory[i].total + '</td>');
         $('#historyBody').append(tr);
     }
+}
+
+function resetPage () {
+    $('#historyBody').empty();
+    let emptyArray = [];
+    $.ajax({
+        type: 'POST',
+        data: emptyArray,
+        url: '/reset'
+      }).done(function(response){
+        
+        }).fail(function(response){x
+      })
 }
