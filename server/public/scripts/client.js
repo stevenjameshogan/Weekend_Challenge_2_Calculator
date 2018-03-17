@@ -1,95 +1,91 @@
 
 $(readyNow);
 
-function readyNow() {
+function readyNow() { // enables event handlers, ontains array of calculation history from server
     eventHandlers();
     getAllCalcs()
 }
-function eventHandlers() { 
+function eventHandlers() { // routes to corresponding POST request function based on op type button clicked
     $('#addBtn').on('click', addVals);
     $('#subtractBtn').on('click', subtractVals);
     $('#multiplyBtn').on('click', multiplyVals);
     $('#divideBtn').on('click', divideVals);
     $('#refreshBtn').on('click', resetPage);
 }
-function addVals() {
+function addVals() { // packages user inputs in an object, sends to server, appends to DOM on success
     let val1In = parseInt($('#value1In').val());
     let val2In = parseInt($('#value2In').val());
-    let calcTypeIn = 'add';
+    let calcTypeIn = '+';
+    let calcInputs = {value1: val1In, value2: val2In, calcType: calcTypeIn};
+    $.ajax({
+        type: 'POST',
+        data: calcInputs,
+        url: '/total'
+    }).done(function(response) { // response is '200', success
+        clearInputs(); 
+        getAllCalcs(); 
+    }).fail(function(response) {
+    })
+}
+function subtractVals() { // packages user inputs in an object, sends to server, appends to DOM on success
+    let val1In = parseInt($('#value1In').val());
+    let val2In = parseInt($('#value2In').val());
+    let calcTypeIn = '-';
     let calcInputs = {value1: val1In, value2: val2In, calcType: calcTypeIn};
     $.ajax({
         type: 'POST',
         data: calcInputs,
         url: '/total'
     }).done(function(response) {
+        clearInputs();
+        getAllCalcs();
     }).fail(function(response) {
     })
-    clearInputs();
-    getAllCalcs()
 }
-function subtractVals() {
+function multiplyVals() { // packages user inputs in an object, sends to server, appends to DOM on success
     let val1In = parseInt($('#value1In').val());
     let val2In = parseInt($('#value2In').val());
-    let calcTypeIn = 'subtract';
+    let calcTypeIn = '*';
     let calcInputs = {value1: val1In, value2: val2In, calcType: calcTypeIn};
     $.ajax({
         type: 'POST',
         data: calcInputs,
         url: '/total'
     }).done(function(response) {
+        clearInputs();
+        getAllCalcs();
     }).fail(function(response) {
     })
-    clearInputs();
-    getAllCalcs()
 }
-function multiplyVals() {
+function divideVals() { // packages user inputs in an object, sends to server, appends to DOM on success
     let val1In = parseInt($('#value1In').val());
     let val2In = parseInt($('#value2In').val());
-    let calcTypeIn = 'multiply';
+    let calcTypeIn = '/';
     let calcInputs = {value1: val1In, value2: val2In, calcType: calcTypeIn};
     $.ajax({
         type: 'POST',
         data: calcInputs,
         url: '/total'
     }).done(function(response) {
+        clearInputs();
+        getAllCalcs();
     }).fail(function(response) {
     })
-    clearInputs();
-    getAllCalcs()
-}
-function divideVals() {
-    let val1In = parseInt($('#value1In').val());
-    let val2In = parseInt($('#value2In').val());
-    let calcTypeIn = 'divide';
-    let calcInputs = {value1: val1In, value2: val2In, calcType: calcTypeIn};
-    $.ajax({
-        type: 'POST',
-        data: calcInputs,
-        url: '/total'
-    }).done(function(response) {
-    }).fail(function(response) {
-    })
-    clearInputs();
-    getAllCalcs()
-}
-function clearInputs(){
-    $('#value1In').val('');
-    $('#value2In').val('');
 }
 
-function getAllCalcs() {
+function getAllCalcs() { // obtains calc. history array from server, appends to DOM
     $.ajax({
         type: 'GET',
         url: '/total'
     }).done(function(response){
-        appendToDom(response);
+        appendToDom(response); // response is calcHistoryArray from server
         console.log(response);
     })
 
     
 }
 
-function appendToDom(calcHistory) {
+function appendToDom(calcHistory) { // loops over calcHistoryArray, appends to DOM as new table row
     $('#historyBody').empty();
     for (let i = 0; i < calcHistory.length; i++) {
         let tr = $('<tr></tr>');
@@ -101,15 +97,19 @@ function appendToDom(calcHistory) {
     }
 }
 
-function resetPage () {
+function resetPage () { // clears DOM table, sends an emptyArray to server to clear out calc history
     $('#historyBody').empty();
     let emptyArray = [];
     $.ajax({
         type: 'POST',
         data: emptyArray,
         url: '/reset'
-      }).done(function(response){
-        
-        }).fail(function(response){x
-      })
+    }).done(function(response){
+    }).fail(function(response){
+    })
+}
+
+function clearInputs(){ // resets value in input fields upon submitting a calculations
+    $('#value1In').val('');
+    $('#value2In').val('');
 }
