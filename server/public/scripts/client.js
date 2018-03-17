@@ -2,8 +2,8 @@
 $(readyNow);
 
 function readyNow() {
-    console.log('jQuery sourced');
     eventHandlers();
+    getAllCalcs()
 }
 
 function eventHandlers() { 
@@ -23,12 +23,10 @@ function addVals() {
         data: calcInputs,
         url: '/total'
     }).done(function(response) {
-        console.log('monkey');
-        appendToDom(response);
     }).fail(function(response) {
-        console.log('bear');
     })
     clearInputs();
+    getAllCalcs()
 }
 function subtractVals() {
     let val1In = parseInt($('#value1In').val());
@@ -43,6 +41,7 @@ function subtractVals() {
     }).fail(function(response) {
     })
     clearInputs();
+    getAllCalcs()
 }
 function multiplyVals() {
     let val1In = parseInt($('#value1In').val());
@@ -57,6 +56,7 @@ function multiplyVals() {
     }).fail(function(response) {
     })
     clearInputs();
+    getAllCalcs()
 }
 function divideVals() {
     let val1In = parseInt($('#value1In').val());
@@ -71,6 +71,7 @@ function divideVals() {
     }).fail(function(response) {
     })
     clearInputs();
+    getAllCalcs()
 }
 function clearInputs(){
     $('#value1In').val('');
@@ -82,13 +83,21 @@ function getAllCalcs() {
         type: 'GET',
         url: '/total'
     }).done(function(response){
-        console.log('in all calcs');
-        
+        appendToDom(response);
+        console.log(response);
     })
+
+    
 }
 
-function appendToDom(calcInputs) {
-    for (let calc of calcInputs) {
-        $('#historyBody').append(calc);
+function appendToDom(calcHistory) {
+    $('#historyBody').empty();
+    for (let i = 0; i < calcHistory.length; i++) {
+        let tr = $('<tr></tr>');
+        tr.append('<td>' + calcHistory[i].value1 + '</td>');
+        tr.append('<td>' + calcHistory[i].calcType + '</td>');
+        tr.append('<td>' + calcHistory[i].value2 + '</td>');
+        tr.append('<td>' + calcHistory[i].total + '</td>');
+        $('#historyBody').append(tr);
     }
 }

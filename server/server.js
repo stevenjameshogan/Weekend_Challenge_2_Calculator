@@ -2,14 +2,15 @@ let express = require('express');
 let app = express();
 let bodyParser = require('body-parser');
 const PORT = 3086;
-let calcHistory = [];
+let calcHistoryArray = [];
 let totalCalculation;
 
 app.use(bodyParser.urlencoded({extended:true})); // add body parser
 app.use(express.static('server/public')); // add access to static file folder
 
 app.get('/total', (req, res) => {
-  res.send(calcHistory);
+  res.send(calcHistoryArray)
+  
 })
 
 app.post('/total', (req, res) => { // receive user DOM inputs, call correct op. function
@@ -31,8 +32,8 @@ app.post('/total', (req, res) => { // receive user DOM inputs, call correct op. 
     break;
   }
   newCalc.total = totalCalculation;
-  calcHistory.push(newCalc);
-  console.log(calcHistory);
+  calcHistoryArray.push(newCalc);
+  console.log(calcHistoryArray);
   res.sendStatus(200);
 })
 

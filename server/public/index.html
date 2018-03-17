@@ -15,8 +15,9 @@
     <h1>Hadar Weekend Calculator Challenge!</h1>
 
     <div id="inputDiv">
-        <input placeholder="Value 1" id="value1In">
-        <input placeholder="Value 2" id="value2In">
+        <span>Val 1</span><input placeholder="Value 1" id="value1In">
+        <span>Val 2</span><input placeholder="Value 2" id="value2In">
+        <span>Calc Type</span>
         <button id="addBtn">+</button>
         <button id="subtractBtn">-</button>
         <button id="multiplyBtn">*</button>
@@ -25,7 +26,7 @@
     </div>
 
     <div id="historyDiv">
-        <h2>Calculation History</h2>
+        <h2>Calculation Log</h2>
         <table>
             <thead><tr><th>Value 1</th><th>Operation</th><th>Value 2</th><th>Total</th></tr></tr></thead>
             <tbody id="historyBody"></tbody>
