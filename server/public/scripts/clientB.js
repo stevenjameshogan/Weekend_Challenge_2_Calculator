@@ -9,54 +9,41 @@ function readyNow() { // enables event handlers, ontains array of calculation hi
     eventHandlers();
     getAllCalcs() // calls to maintain history on page upon refresh until history is reset by user
 }
-function eventHandlers() { // routes to corresponding POST request function based on op type button clicked
 
-    $('#refreshBtn').on('click', resetPage);
-    $('.numberBtn').on('click', setValues);
-    $('.operatorBtn').on('click', setOpType);
-    $('#equalsBtn').on('click', sendCalcData);
-    $('#clearBtn').on('click', clearValues);
-}
+// Primary, opertational functions **
 
-function setValues(){ // sets value1 and value2 based on number pushed by user, ignores if already set
+function setValues(){ // sets value1 and value2 based on number spushed by user
     let valueIn = $(this).val();
-    console.log($(this).val());
-    console.log(opType);
     
-    if (value1 == undefined && opType == undefined) { // check to see if value1 and value2 are already assigned, if so, ignore input
-        console.log('option 1');
-        console.log(opType);
+    if (value1 == undefined && opType == undefined) { // if no buttons have been pressed, set initial value1
         value1 = valueIn;
+        $('#displayDiv').text(valueIn); // displays number on DOM
     }
-    else if(opType == undefined){
-        console.log('option 2');
-        value1 = valueIn + value1;
+    else if(opType == undefined){ // if opType still hasn't been pushed, append new value to value1
+        value1 = value1 + valueIn;
+        $('#displayDiv').append(valueIn); // appends number on DOM
     }
-    else if (value2 === undefined) {
-        console.log('option 3!');
+    else if (value2 === undefined) { // if opType has been set and value2 is udf, set initial value of 2
         value2 = valueIn;
+        $('#displayDiv').text(valueIn); // displays number on DOM
     }
     else {
-        console.log('option 3!');
-        value2 = valueIn + value2;
+        value2 = value2 + valueIn;
+        $('#displayDiv').append(valueIn); // appends number on DOM
     }
-    console.log(value1, value2);
 }
-
 function setOpType(){ // sets opType based on opType button pushed by user
     let opTypeIn = $(this).val();
     opType = opTypeIn;
-    
+    $('#displayDiv').text(opTypeIn)
 }
-
-function sendCalcData(){
+function sendCalcData(){ // ajax 'POST' method, sends new object to server for processing
     let calcInputs = {value1: value1, value2: value2, calcType: opType};
     $.ajax({
         type: 'POST',
         data: calcInputs,
         url: '/total'
-    }).done(function(response) { // response is '200', success
-        console.log('Yes!!!!!');
+    }).done(function(response) { 
         value1 = undefined;
         value2 = undefined;
         opType = undefined;
@@ -65,32 +52,30 @@ function sendCalcData(){
     }).fail(function(response) {
     })
 }
-
-function getAllCalcs() { // obtains calc. history array from server, appends to DOM
+function getAllCalcs() { // ajax 'GET' mothod, obtains calc. history array from server, appends to DOM
     $.ajax({
         type: 'GET',
         url: '/total'
     }).done(function(response){
         appendToDom(response); // response is calcHistoryArray from server
-        console.log(response);
     })
 
     
 }
-
 function appendToDom(calcHistory) { // loops over calcHistoryArray, appends to DOM as new table row
     $('#historyBody').empty();
     for (let i = 0; i < calcHistory.length; i++) {
-        let tr = $('<tr></tr>');
-        tr.append('<td>' + calcHistory[i].value1 + '</td>');
-        tr.append('<td>' + calcHistory[i].calcType + '</td>');
-        tr.append('<td>' + calcHistory[i].value2 + '</td>');
-        tr.append('<td>' + calcHistory[i].total + '</td>');
+        let tr = $('<tr id="historyRow"></tr>');
+        tr.append('<td class="historyCel">' + calcHistory[i].value1 + '</td>');
+        tr.append('<td class="historyCel">' + calcHistory[i].calcType + '</td>');
+        tr.append('<td class="historyCel">' + calcHistory[i].value2 + '</td>');
+        tr.append('<td class="historyCel">' + calcHistory[i].total + '</td>');
         $('#historyBody').append(tr);
+        $('#displayDiv').empty();
+        $('#displayDiv').append(calcHistory[i].total);
     }
 }
-
-function resetPage () { // clears DOM table, sends an emptyArray to server to clear out calc history
+function resetPage () { // ajax 'PUSH' method, clears DOM table, sends an emptyArray to server to clear out calc history
     value1 = undefined;
     value2 = undefined;
     opType = undefined;
@@ -105,6 +90,16 @@ function resetPage () { // clears DOM table, sends an emptyArray to server to cl
     })
 }
 
+// Secondary, listener and cleanup functions
+
+function eventHandlers() { // routes to corresponding POST request function based on op type button clicked
+
+    $('#refreshBtn').on('click', resetPage);
+    $('.numberBtn').on('click', setValues);
+    $('.operatorBtn').on('click', setOpType);
+    $('#equalsBtn').on('click', sendCalcData);
+    $('#clearBtn').on('click', clearValues);
+}
 function clearInputs(){ // resets value in input fields upon submitting a calculations
     $('#value1In').val('');
     $('#value2In').val('');
@@ -113,4 +108,5 @@ function clearValues(){ // resets calculator values to clear calc screen;
     value1 = undefined;
     value2 = undefined;
     opType = undefined;
+    $('#displayDiv').text('');
 }

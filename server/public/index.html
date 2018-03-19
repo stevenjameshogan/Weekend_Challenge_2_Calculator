@@ -12,13 +12,13 @@
     
 </head>
 <body>
-    <h3>Hadar Weekend Calculator Challenge!</h3>
-
+    <h3>The CalcuHadar!</h3>
+    <div id="displayDiv"></div>
     <div id="inputDiv">
         <table id="calculatorSim">
-            <tr><td><button id="clearBtn">R</button></td>
-                <td><button id="plusMinusBtn">±</button></td>
-                <td><button id="percentBtn">%</button></td>
+            <tr><td><button id="clearBtn">C</button></td>
+                <td><button value="±" class="operatorBtn" id="posNegBtn"id="posNegBtn">±</button></td>
+                <td><button value="%" class="operatorBtn" id="percentBtn">%</button></td>
                 <td><button value="/" class="operatorBtn" id="divideBtn">÷</button></td></tr>
             <tr><td><button value="7" class="numberBtn" id="7Btn">7</button></td>
                 <td><button value="8" class="numberBtn" id="8Btn">8</button></td>
@@ -32,19 +32,18 @@
                 <td><button value="2" class="numberBtn" id="2Btn">2</button></td>
                 <td><button value="3" class="numberBtn" id="3Btn">3</button></td>
                 <td><button value="+"class="operatorBtn" id="addBtn">+</button></td></tr>
-            <tr><td><button value="0" class="numberBtn" id="0Btn">0</button></td><td><button id="decimalBtn">.</button></td>
-            <td><button id="equalsBtn">=</button></td></tr>
+            <tr><td><button value="0" class="numberBtn button" id="0Btn">0</button></td>
+                <td><button id="decimalBtn">.</button></td>
+                <td><button></button></td>
+                <td><button id="equalsBtn">=</button></td></tr>
         </table>
-        <button id="refreshBtn">Refresh</button>
     </div>
-
     <div id="historyDiv">
-        <h3>Calculation Log</h3>
-        <table>
-            <thead><tr><th>Value 1</th><th>Operation</th><th>Value 2</th><th>Total</th></tr></tr></thead>
+        <button id="refreshBtn">Refresh Log</button>
+        <table id="historyTable">
+            <thead id="histTableHead"><tr><th>Value 1</th><th>Operation</th><th>Value 2</th><th>Total</th></tr></tr></thead>
             <tbody id="historyBody"></tbody>
         </table>
     </div>
-
 </body>
 </html>
